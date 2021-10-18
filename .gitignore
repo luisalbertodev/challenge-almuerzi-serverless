@@ -1,6 +1,8 @@
 .now
 node_modules
+api
 
 # Environment Variables
 .env
 .env.build
+.vercel
