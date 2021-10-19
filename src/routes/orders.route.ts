@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express'
 import Orders from '../models/Orders'
-import { isAuthenticated } from '../auth'
+import { isAuthenticated, hasRoles } from '../auth'
 
 const router: Router = Router()
 
@@ -23,7 +23,7 @@ router.post('/', isAuthenticated, (req: any, res: Response) => {
       .catch(error => res.status(501).json(error))
 })
 
-router.put('/:id', isAuthenticated, (req: Request, res: Response) => {
+router.put('/:id', isAuthenticated, hasRoles(['admin', 'user']), (req: Request, res: Response) => {
    Orders.findByIdAndUpdate(req.params.id, req.body)
       .then(x => res.status(204).json(x))
       .catch(error => res.status(501).json(error))
