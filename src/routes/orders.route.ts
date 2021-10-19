@@ -1,5 +1,6 @@
 import { Request, Response, Router } from 'express'
 import Orders from '../models/Orders'
+import { isAuthenticated } from '../auth'
 
 const router: Router = Router()
 
@@ -15,19 +16,20 @@ router.get('/:id', (req: Request, res: Response) => {
       .catch(error => res.status(501).json(error))
 })
 
-router.post('/', (req: Request, res: Response) => {
-   Orders.create(req.body)
+router.post('/', isAuthenticated, (req: any, res: Response) => {
+   const { _id } = req.user
+   Orders.create({ ...req.body, user_id: _id })
       .then(x => res.status(201).json(x))
       .catch(error => res.status(501).json(error))
 })
 
-router.put('/:id', (req: Request, res: Response) => {
+router.put('/:id', isAuthenticated, (req: Request, res: Response) => {
    Orders.findByIdAndUpdate(req.params.id, req.body)
       .then(x => res.status(204).json(x))
       .catch(error => res.status(501).json(error))
 })
 
-router.delete('/:id', (req: Request, res: Response) => {
+router.delete('/:id', isAuthenticated, (req: Request, res: Response) => {
    Orders.findByIdAndDelete(req.params.id)
       .then(x => res.status(204).json(x))
       .catch(error => res.status(501).json(error))

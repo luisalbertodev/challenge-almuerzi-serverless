@@ -4,6 +4,7 @@ import mongoose from 'mongoose'
 import morgan from 'morgan'
 import cors from 'cors'
 
+import auth from './routes/auth.route'
 import meals from './routes/meals.route'
 import orders from './routes/orders.route'
 
@@ -19,6 +20,7 @@ app.use(express.json())
 app.use(cors())
 
 // routes
+app.use('/api/auth', auth)
 app.use('/api/meals', meals)
 app.use('/api/orders', orders)
 
