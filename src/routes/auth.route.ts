@@ -24,7 +24,7 @@ router.post('/register', (req: Request, res: Response) => {
                return res.send('Usuario ya existe')
             }
 
-            Users.create({ email, password, salt: newSalt }).then(() => {
+            Users.create({ email, password: encrypted, salt: newSalt }).then(() => {
                return res.send('Usuario creado con exito')
             })
          })
@@ -36,7 +36,7 @@ router.post('/login', (req: Request, res: Response) => {
    const { email, password } = req.body
 
    Users.findOne({ email }).then(user => {
-      console.log("login", user)
+      console.log("login", user, user._id)
 
       if (!user) {
          return res.send('Usuario y/o contraseña incorrecta')
