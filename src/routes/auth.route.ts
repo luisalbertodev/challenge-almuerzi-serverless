@@ -35,7 +35,9 @@ router.post('/register', (req: Request, res: Response) => {
 router.post('/login', (req: Request, res: Response) => {
    const { email, password } = req.body
 
-   Users.findOne({ email }).exec().then(user => {
+   Users.findOne({ email }).then(user => {
+      console.log("login", user)
+
       if (!user) {
          return res.send('Usuario y/o contraseña incorrecta')
       }
@@ -44,7 +46,7 @@ router.post('/login', (req: Request, res: Response) => {
          const encryptedPassword = key.toString('base64')
 
          if (user.password === encryptedPassword) {
-            const token = signToken(user._id)
+            const token = signToken(`${user._id}`)
             return res.send({ token })
          }
          return res.send('Usuario y/o contraseña incorrecta')
